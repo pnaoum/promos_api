@@ -46,7 +46,6 @@ promos_api/
 └───logs/ -> Contains log files for the configured loggers
 └───requirements.txt -> All required python packages 
 └───manage.py 
-└───.env --> 
 ```
 
 ### Authentication
