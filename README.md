@@ -3,7 +3,7 @@
 REST API for promo system in which users are assigned various promos and can use the promo points in a specific task of
 their choosing
 
-[![Build Status](https://travis-ci.com/pnaoum/promos_api.svg?branch=dev)](https://travis-ci.com/pnaoum/promos_api)
+[![Build Status](https://travis-ci.com/pnaoum/promos_api.svg?branch=master)](https://travis-ci.com/pnaoum/promos_api)
 ### Setup
 
 1. Clone repo
