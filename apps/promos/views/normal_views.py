@@ -3,7 +3,6 @@ from datetime import datetime
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin
-from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
 from apps.promos.constants import PROMO_CODE, POINTS, ERR_MSG_POINTS_POSITIVE, ERR_MSG_NO_ENOUGH_POINTS, \
@@ -44,34 +43,34 @@ class PromoPointsView(RetrieveModelMixin, UpdateModelMixin, GenericAPIView):
 
     def put(self, request, *args, **kwargs):
         """
-        Deduct points from user's promo
+        Edit user's points for a promo by deducting points
         """
         try:
             points = request.data[POINTS]
-            # Assert input is valid integer
+            # Assert input is valid positive integer
             try:
                 points = int(points)
                 if points < 0:
                     raise ValueError
             except ValueError:
-                return Response(data={POINTS: ERR_MSG_POINTS_POSITIVE},
-                                status=status.HTTP_400_BAD_REQUEST)
+                return Response(data={POINTS: ERR_MSG_POINTS_POSITIVE}, status=status.HTTP_400_BAD_REQUEST)
             promo_code = self.kwargs.get(PROMO_CODE, None)
             try:
                 promo = Promo.objects.get(promo_code=promo_code)
+                # Reject operation if user consumes more points than available
                 if promo.points < points:
                     return Response(data={POINTS: ERR_MSG_NO_ENOUGH_POINTS},
                                     status=status.HTTP_400_BAD_REQUEST)
+                # Reject operation if current time exceeds promo end_time (i.e.: promo expired)
                 if promo.end_time and promo.end_time < datetime.now():
                     return Response(data={END_TIME: ERR_MSG_PROMO_EXPIRED},
                                     status=status.HTTP_400_BAD_REQUEST)
-
                 promo.points -= points
                 promo.save()
                 return Response(PointsSerializer(promo).data, status=status.HTTP_202_ACCEPTED)
-            except Promo.DoesNotExist as e:
+            except Promo.DoesNotExist:
                 return Response(data={DETAIL: NOT_FOUND}, status=status.HTTP_404_NOT_FOUND)
-        except Exception as e:
+        except Exception as e:  # Much customizations are made in this method, catch any unexpected errors
             from config.loggers import log_exception
             log_exception(e)
             return Response(data={DETAIL: BAD_REQUEST}, status=status.HTTP_400_BAD_REQUEST)

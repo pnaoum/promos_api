@@ -7,5 +7,8 @@ class HealthTests(TestCase):
         self.client = Client()
 
     def test_health(self):
+        """
+        Test Health of the App
+        """
         response = self.client.get(path='/api/v1/health/')
         assert response.status_code == 200

@@ -16,6 +16,7 @@ import environ
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = environ.Path(__file__) - 2
 
+# Read environment variables from .env file
 env = environ.Env()
 
 if os.path.exists(BASE_DIR.path('.env').__str__()):

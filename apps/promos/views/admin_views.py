@@ -11,9 +11,6 @@ from commons.pagination import CustomLimitOffsetPagination
 
 
 class PromoListCreateView(ListCreateAPIView):
-    """
-    List & Create Promos - Accessible by Admins only
-    """
     queryset = Promo.objects.all()
     permission_classes = (IsAuthenticated, IsAdmin)
     pagination_class = CustomLimitOffsetPagination
@@ -25,6 +22,18 @@ class PromoListCreateView(ListCreateAPIView):
         else:
             return PromoRequestSerializer
 
+    def get(self, request, *args, **kwargs):
+        """
+        List Promos - Accessible by Admins only
+        """
+        return super(PromoListCreateView, self).get(request, *args, **kwargs)
+
+    def post(self, request, *args, **kwargs):
+        """
+        Create Promos - Accessible by Admins only
+        """
+        return super(PromoListCreateView, self).post(request, *args, **kwargs)
+
 
 class PromoUpdateDestroyView(UpdateModelMixin, DestroyModelMixin, GenericAPIView):
     queryset = Promo.objects.all()
@@ -35,12 +44,12 @@ class PromoUpdateDestroyView(UpdateModelMixin, DestroyModelMixin, GenericAPIView
 
     def put(self, request, *args, **kwargs):
         """
-        Edit Promo - Accessible by Admins only
+        Edit Promo by Promo Code - Accessible by Admins only
         """
         return self.update(request, *args, **kwargs)
 
     def delete(self, request, *args, **kwargs):
         """
-        Delete Promo - Accessible by Admins only
+        Delete Promo by Promo Code - Accessible by Admins only
         """
         return self.destroy(request, *args, **kwargs)

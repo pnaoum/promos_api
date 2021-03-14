@@ -12,11 +12,10 @@ class PromoRequestSerializer(serializers.ModelSerializer):
         fields = '__all__'
 
     def validate(self, attrs):
-        # Reject admins to have promos
-        if attrs[POINTS] <0:
+        # Assert points are positive
+        if attrs[POINTS] < 0:
             raise ValidationError(ERR_MSG_POINTS_POSITIVE)
+        # Reject admins to have promos
         if attrs[USER].role == ADMIN_USER:
             raise PermissionDenied(ERR_MSG_ADMIN_NO_PROMO)
         return super(PromoRequestSerializer, self).validate(attrs)
-
-
