@@ -7,10 +7,9 @@ from rest_framework.response import Response
 
 from apps.promos.constants import PROMO_CODE, POINTS, ERR_MSG_POINTS_POSITIVE, ERR_MSG_NO_ENOUGH_POINTS, \
     ERR_MSG_PROMO_EXPIRED, END_TIME
-from apps.promos.filters import PromoFilter
+from apps.promos.filters import UserPromoFilter
 from apps.promos.models import Promo
 from apps.promos.serializers import UserPromoResponseSerializer, PointsSerializer
-# from apps.users.models import UserPromos
 from commons.global_constants import DETAIL, NOT_FOUND, BAD_REQUEST
 from commons.pagination import CustomLimitOffsetPagination
 
@@ -21,7 +20,7 @@ class UserPromoList(ListAPIView):
     """
     serializer_class = UserPromoResponseSerializer
     pagination_class = CustomLimitOffsetPagination
-    filterset_class = PromoFilter
+    filterset_class = UserPromoFilter
 
     def get_queryset(self):
         return Promo.objects.filter(user=self.request.user)

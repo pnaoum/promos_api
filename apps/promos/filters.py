@@ -11,3 +11,13 @@ class PromoFilter(FilterSet):
     class Meta:
         model = Promo
         exclude = ('description',)  # description is a text field, so it is excluded
+
+
+class UserPromoFilter(FilterSet):
+    """
+    Model Filter set for Users promos
+    """
+
+    class Meta:
+        model = Promo
+        exclude = ('description', 'user')  # description is a text field, so it is excluded - user is not
