@@ -1,3 +1,10 @@
 from django.contrib import admin
 
-# Register your models here.
+from apps.promos.models import Promo
+
+
+class PromoAdmin(admin.ModelAdmin):
+    pass
+
+
+admin.site.register(Promo, PromoAdmin)
