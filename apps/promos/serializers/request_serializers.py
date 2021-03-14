@@ -16,7 +16,7 @@ class PromoRequestSerializer(serializers.ModelSerializer):
         # Assert points are positive
         if attrs[POINTS] < 0:
             raise ValidationError(ERR_MSG_POINTS_POSITIVE)
-        if attrs[END_TIME]:
+        if END_TIME in attrs and attrs[END_TIME]:
             if attrs[END_TIME] < attrs[START_TIME]:
                 raise ValidationError(ERR_MSG_END_TIME_BIGGER)
         # Reject admins to have promos
