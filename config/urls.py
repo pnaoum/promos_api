@@ -4,7 +4,6 @@ from django.urls import path, include
 
 from apps.users.views import Login, SignUp
 from config import settings
-from config.settings import DEBUG
 
 # Prefix all urls identifying version
 API_V1_PREFIX = 'api/v1/'
@@ -24,8 +23,8 @@ urlpatterns = auth_urlpatterns + apps_urlpatterns
 urlpatterns += [path(API_V1_PREFIX, include('swagger.urls'))] + static(settings.STATIC_URL,
                                                                        document_root=settings.STATIC_ROOT)
 
-# Show admin in development mode only
-if DEBUG:
-    urlpatterns += [
-        path('admin/', admin.site.urls),
-    ]
+# TODO: Show admin in development mode only
+# if DEBUG:
+urlpatterns += [
+    path('admin/', admin.site.urls),
+]
