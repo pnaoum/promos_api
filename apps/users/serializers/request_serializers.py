@@ -16,6 +16,11 @@ class SignupSerializer(serializers.ModelSerializer):
             'mobile_number': {'allow_null': True, 'required': False},
         }
 
+    def validate(self, attrs):
+        from django.contrib.auth.password_validation import validate_password
+        validate_password(attrs['password'])
+        return super(SignupSerializer, self).validate(attrs)
+
     def create(self, validated_data):
         user = super().create(validated_data)
         user.set_password(validated_data['password'])
