@@ -16,3 +16,6 @@ class Promo(models.Model):
     is_active = models.BooleanField()
     description = models.TextField()
     objects = PromoManager()
+
+    def __str__(self):
+        return self.promo_code
