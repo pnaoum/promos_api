@@ -1,0 +1,9 @@
+language: python
+python:
+  - "3.7"
+install:
+  - python -m pip install --upgrade pip
+  - pip install -r requirements.txt
+  - echo "SECRET_KEY=key1234" >> .env && echo "ALLOWED_HOSTS=*" >> .env
+script:
+  - python manage.py test apps

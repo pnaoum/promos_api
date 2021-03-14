@@ -1,0 +1,25 @@
+# Static files
+/static/
+
+# Virtual Environment
+.venv
+/venv/
+
+
+#PyCharm
+/.idea/
+
+#Env
+.env
+
+# Database
+*.sqlite3
+
+# PyCache
+__pycache__/
+
+# Logs
+/logs/
+
+# Docs
+/docs/
