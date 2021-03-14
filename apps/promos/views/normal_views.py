@@ -21,7 +21,6 @@ class UserPromoList(ListAPIView):
     List all available user's promos
     """
     serializer_class = UserPromoResponseSerializer
-    permission_classes = (IsAuthenticated,)
     pagination_class = CustomLimitOffsetPagination
     filterset_class = PromoFilter
 
@@ -33,7 +32,6 @@ class PromoPointsView(RetrieveModelMixin, UpdateModelMixin, GenericAPIView):
     lookup_url_kwarg = PROMO_CODE
     lookup_field = PROMO_CODE
     serializer_class = PointsSerializer
-    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         return Promo.objects.filter(user=self.request.user)
