@@ -1,10 +1,13 @@
+from datetime import datetime
+
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 
-from apps.promos.constants import PROMO_CODE, POINTS
+from apps.promos.constants import PROMO_CODE, POINTS, ERR_MSG_POINTS_POSITIVE, ERR_MSG_NO_ENOUGH_POINTS, \
+    ERR_MSG_PROMO_EXPIRED, END_TIME
 from apps.promos.filters import PromoFilter
 from apps.promos.models import Promo
 from apps.promos.serializers import UserPromoResponseSerializer, PointsSerializer
@@ -53,14 +56,18 @@ class PromoPointsView(RetrieveModelMixin, UpdateModelMixin, GenericAPIView):
                 if points < 0:
                     raise ValueError
             except ValueError:
-                return Response(data={"points": "points have to be a valid positive integer"},
+                return Response(data={POINTS: ERR_MSG_POINTS_POSITIVE},
                                 status=status.HTTP_400_BAD_REQUEST)
             promo_code = self.kwargs.get(PROMO_CODE, None)
             try:
                 promo = Promo.objects.get(promo_code=promo_code)
                 if promo.points < points:
-                    return Response(data={POINTS: 'You do not have enough points to consume in this promo'},
+                    return Response(data={POINTS: ERR_MSG_NO_ENOUGH_POINTS},
                                     status=status.HTTP_400_BAD_REQUEST)
+                if promo.end_time and promo.end_time < datetime.now():
+                    return Response(data={END_TIME: ERR_MSG_PROMO_EXPIRED},
+                                    status=status.HTTP_400_BAD_REQUEST)
+
                 promo.points -= points
                 promo.save()
                 return Response(PointsSerializer(promo).data, status=status.HTTP_202_ACCEPTED)
