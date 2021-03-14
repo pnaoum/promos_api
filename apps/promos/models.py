@@ -1,11 +1,14 @@
 from django.db import models
+from django.db.models import CASCADE
 
 from apps.promos.managers import PromoManager
+from apps.users.models import CustomUser
 
 
 class Promo(models.Model):
     promo_code = models.CharField(max_length=255, unique=True)
-    amount = models.PositiveIntegerField()
+    user = models.ForeignKey(CustomUser, on_delete=CASCADE)
+    points = models.PositiveIntegerField()
     type = models.CharField(max_length=10)
     creation_time = models.DateTimeField(auto_now=True)
     start_time = models.DateTimeField()
@@ -13,3 +16,6 @@ class Promo(models.Model):
     is_active = models.BooleanField()
     description = models.TextField()
     objects = PromoManager()
+
+    def __str__(self):
+        return self.promo_code

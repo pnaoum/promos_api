@@ -1,20 +1,23 @@
 from rest_framework import serializers
 
-from apps.promos.constants import PROMO_CODE, POINTS
+from apps.promos.constants import POINTS
 from apps.promos.models import Promo
-from apps.users.models import UserPromos
+from apps.users.constants import USER
 
 
-class PromoSerializer(serializers.ModelSerializer):
+class PromoResponseSerializer(serializers.ModelSerializer):
     class Meta:
         model = Promo
-        exclude = ('id',)
+        exclude = ('id',)  # promo_code is the unique identifier exposed to the users, id is not exposed
 
 
 class UserPromoResponseSerializer(serializers.ModelSerializer):
-    # promo = PromoSerializer(source='promo_code')  # Serialize full promo object
-    promo_code = serializers.CharField(read_only=True, source='promo_code.promo_code')
-
     class Meta:
-        model = UserPromos
-        fields = (PROMO_CODE, POINTS)
+        model = Promo
+        exclude = ('id', USER,)  # users by default retrieve their data, user id is not exposed
+
+
+class PointsSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = Promo
+        fields = (POINTS,)

@@ -1,27 +1,21 @@
 from rest_framework import serializers
-from rest_framework.exceptions import PermissionDenied
+from rest_framework.exceptions import PermissionDenied, ValidationError
 
-from apps.promos.constants import PROMO_CODE, POINTS
-from apps.users.constants import ADMIN_USER, USER
-from apps.users.models import UserPromos
-
-
-class AssignPromoRequestSerializer(serializers.Serializer):
-    promo_code = serializers.CharField()
+from apps.promos.constants import POINTS, ERR_MSG_POINTS_POSITIVE, ERR_MSG_ADMIN_NO_PROMO
+from apps.promos.models import Promo
+from apps.users.constants import USER, ADMIN_USER
 
 
-class UserPromoRequestSerializer(serializers.ModelSerializer):
+class PromoRequestSerializer(serializers.ModelSerializer):
     class Meta:
-        model = UserPromos
-        fields = (USER, PROMO_CODE)
-
-    def create(self, validated_data):
-        # Add total amount of promo to user points when promo is added first time
-        validated_data[POINTS] = validated_data[PROMO_CODE].amount
-        return super(UserPromoRequestSerializer, self).create(validated_data)
+        model = Promo
+        fields = '__all__'
 
     def validate(self, attrs):
+        # Assert points are positive
+        if attrs[POINTS] < 0:
+            raise ValidationError(ERR_MSG_POINTS_POSITIVE)
         # Reject admins to have promos
         if attrs[USER].role == ADMIN_USER:
-            raise PermissionDenied('Admin users are not allowed to have promos.')
-        return super(UserPromoRequestSerializer, self).validate(attrs)
+            raise PermissionDenied(ERR_MSG_ADMIN_NO_PROMO)
+        return super(PromoRequestSerializer, self).validate(attrs)

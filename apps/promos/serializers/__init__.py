@@ -1,2 +1,2 @@
-from .request_serializers import AssignPromoRequestSerializer, UserPromoRequestSerializer
-from .response_serializers import PromoSerializer, UserPromoResponseSerializer
+from .request_serializers import PromoRequestSerializer
+from .response_serializers import PromoResponseSerializer, PointsSerializer,UserPromoResponseSerializer

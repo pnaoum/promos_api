@@ -1,2 +1,4 @@
+# API Response Constants
 DETAIL = 'detail'
-BAD_REQUEST = 'Bad Request'
+BAD_REQUEST = 'Bad request.'
+NOT_FOUND = 'Not found.'
