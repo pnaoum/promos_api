@@ -71,7 +71,7 @@ class PromoTests(TestCase):
         Create Promo
         """
         response = self.client.post(path='/api/v1/promos/', **self.admin_auth_header,
-                                    data={'promo_code': 'PROMO1', 'amount': 100, 'start_time': datetime.now(tz=UTC),
+                                    data={'promo_code': 'PROMO1', 'points': 100, 'start_time': datetime.now(tz=UTC),
                                           'type': 'discount', 'is_active': True, 'description': 'Test Promo'})
         assert response.status_code == 201
         assert Promo.objects.count() == 1
@@ -80,10 +80,10 @@ class PromoTests(TestCase):
         """
         Edit Promo
         """
-        Promo.objects.create(**{'promo_code': 'PROMO1', 'amount': 100, 'start_time': datetime.now(tz=UTC),
+        Promo.objects.create(**{'promo_code': 'PROMO1', 'points': 100, 'start_time': datetime.now(tz=UTC),
                                 'type': 'discount', 'is_active': True, 'description': 'Test Promo'})
         response = self.client.put(path='/api/v1/promos/PROMO1/', **self.admin_auth_header,
-                                   data={'promo_code': 'PROMO2', 'amount': 100, 'start_time': datetime.now(tz=UTC),
+                                   data={'promo_code': 'PROMO2', 'points': 100, 'start_time': datetime.now(tz=UTC),
                                          'type': 'discount', 'is_active': True, 'description': 'Test Promo'},
                                    content_type='application/json')
         assert response.status_code == 200
@@ -97,7 +97,7 @@ class PromoTests(TestCase):
         """
         Delete Promo
         """
-        Promo.objects.create(**{'promo_code': 'PROMO1', 'amount': 100, 'start_time': datetime.now(tz=UTC),
+        Promo.objects.create(**{'promo_code': 'PROMO1', 'points': 100, 'start_time': datetime.now(tz=UTC),
                                 'type': 'discount', 'is_active': True, 'description': 'Test Promo'})
         # Assert created
         assert Promo.objects.count() == 1
@@ -110,7 +110,7 @@ class PromoTests(TestCase):
         """
         Assign Promo to user
         """
-        Promo.objects.create(**{'promo_code': 'PROMO1', 'amount': 100, 'start_time': datetime.now(tz=UTC),
+        Promo.objects.create(**{'promo_code': 'PROMO1', 'points': 100, 'start_time': datetime.now(tz=UTC),
                                 'type': 'discount', 'is_active': True, 'description': 'Test Promo'})
         n = CustomUser.objects.get(username='normal_u')
         response = self.client.post(path='/api/v1/users/' + str(n.id) + '/promos/', data={'promo_code': 'PROMO1'},
@@ -125,7 +125,7 @@ class PromoTests(TestCase):
         """
         Consume Points
         """
-        Promo.objects.create(**{'promo_code': 'PROMO1', 'amount': 100, 'start_time': datetime.now(tz=UTC),
+        Promo.objects.create(**{'promo_code': 'PROMO1', 'points': 100, 'start_time': datetime.now(tz=UTC),
                                 'type': 'discount', 'is_active': True, 'description': 'Test Promo'})
         n = CustomUser.objects.get(username='normal_u')
         response = self.client.post(path='/api/v1/users/' + str(n.id) + '/promos/', data={'promo_code': 'PROMO1'},
