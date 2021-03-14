@@ -10,15 +10,3 @@ class CustomUser(AbstractUser):
     address = models.CharField(max_length=255, null=True)
     mobile_number = models.CharField(max_length=255, null=True)
     objects = CustomUserManager()
-
-#
-# class UserPromos(models.Model):
-#     """
-#     MTM table for user - promo relationship
-#     """
-#     user = models.ForeignKey(CustomUser, on_delete=CASCADE)
-#     promo_code = models.ForeignKey(Promo, on_delete=CASCADE, to_field=PROMO_CODE, db_column=PROMO_CODE)
-#     points = models.PositiveIntegerField()
-#
-#     class Meta:
-#         unique_together = (USER, PROMO_CODE)
