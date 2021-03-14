@@ -1,5 +1,6 @@
 from datetime import datetime
 
+from pytz import UTC
 from rest_framework import status
 from rest_framework.generics import GenericAPIView, ListAPIView
 from rest_framework.mixins import RetrieveModelMixin, UpdateModelMixin
@@ -61,7 +62,7 @@ class PromoPointsView(RetrieveModelMixin, UpdateModelMixin, GenericAPIView):
                     return Response(data={POINTS: ERR_MSG_NO_ENOUGH_POINTS},
                                     status=status.HTTP_400_BAD_REQUEST)
                 # Reject operation if current time exceeds promo end_time (i.e.: promo expired)
-                if promo.end_time and promo.end_time < datetime.now():
+                if promo.end_time and promo.end_time < datetime.now(tz=UTC):
                     return Response(data={END_TIME: ERR_MSG_PROMO_EXPIRED},
                                     status=status.HTTP_400_BAD_REQUEST)
                 promo.points -= points
